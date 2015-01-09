@@ -23,8 +23,9 @@ public class PuzzleSolver{
         Path outputPath = Paths.get(outputFile);
 	Puzzle p = new PuzzleImpl();
 	final long startTime = System.currentTimeMillis();
-	p.initialize(inputPath);
-	String res = p.solve();
+	boolean flag = p.initialize(inputPath);
+	String res = "";
+	if(flag) res = p.solve();
 	final long endTime = System.currentTimeMillis();
 	System.out.println(endTime - startTime);
 	printOutput(res, outputPath);
