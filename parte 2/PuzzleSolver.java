@@ -21,13 +21,10 @@ public class PuzzleSolver{
 	String outputFile = args[1];
 	Path inputPath = Paths.get(inputFile);
         Path outputPath = Paths.get(outputFile);
-	Puzzle p = new ConcurrentPuzzleImpl();
-	final long startTime = System.currentTimeMillis();
+	Puzzle p = new ConcurrentPuzzleImpl();	
 	boolean flag = p.initialize(inputPath);
 	String res = "";
-	if(flag) res = p.solve();
-	final long endTime = System.currentTimeMillis();
-	System.out.println(endTime - startTime);
+	if(flag) res = p.solve();	
 	printOutput(res, outputPath);
     }
 }
