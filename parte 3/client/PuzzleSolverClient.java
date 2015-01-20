@@ -2,6 +2,7 @@ package client;
 
 import common.*;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -24,6 +25,13 @@ public class PuzzleSolverClient{
 	}
 	return result;
     }
+    static void printOutput(String output, Path outputPath){
+	try(BufferedWriter writer = Files.newBufferedWriter(outputPath, charset)){
+		writer.write(output);
+	    } catch(IOException e){
+	    System.err.println(e);
+	}
+    }
     public static void main(String[] args) throws Exception{
 	if(args.length < 3){
 	    System.out.println("Errore: manca qualche input.");
@@ -34,6 +42,11 @@ public class PuzzleSolverClient{
 	String name = args[2];
 	Path inputPath = Paths.get(inputFile);
 	Path outputPath = Paths.get(outputFile);
+	String input = createInput(inputPath);
         PuzzleSolverServerIntf server = (PuzzleSolverServerIntf)Naming.lookup("//"+name+":2020/server");
+	Puzzle puzzle = server.getPuzzle();
+	puzzle.initialize(input);
+        String output = puzzle.solve();
+	printOutput(output, outputPath);
     }
 }
