@@ -43,9 +43,13 @@ public class PuzzleSolverClient{
 	Path inputPath = Paths.get(inputFile);
 	Path outputPath = Paths.get(outputFile);
 	String input = createInput(inputPath);
-        PuzzleSolverServerIntf server = (PuzzleSolverServerIntf)Naming.lookup("//"+name+":2020/server");
+	PuzzleSolverServerIntf server = (PuzzleSolverServerIntf)Naming.lookup("//"+name+":2020/server");
 	Puzzle puzzle = server.getPuzzle();
-	puzzle.initialize(input);
+	String correctInput = puzzle.initialize(input);
+	if(!correctInput.equals("")){
+	    printOutput(correctInput, outputPath);
+	    return;
+	}
         String output = puzzle.solve();
 	printOutput(output, outputPath);
     }
