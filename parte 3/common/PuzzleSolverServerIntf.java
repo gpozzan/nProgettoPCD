@@ -2,6 +2,6 @@ package common;
 
 import java.rmi.*;
 
-public interface PuzzleServer extends Remote{
+public interface PuzzleSolverServerIntf extends Remote{
     Puzzle getPuzzle() throws RemoteException;
 }

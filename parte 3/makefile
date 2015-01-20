@@ -7,8 +7,7 @@ JC = javac
 CLASSES = \
         ./client/PuzzleSolverClient.java \
 	./common/Puzzle.java \
-	./common/PuzzleServer.java \
-	./server/PuzzleServerImpl.java \
+	./common/PuzzleSolverServerIntf.java \
 	./server/PuzzleSolverServer.java \
 	./server/engine/AbstractPuzzle.java \
 	./server/engine/ConcurrentPuzzleImpl.java \
