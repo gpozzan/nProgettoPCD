@@ -20,8 +20,7 @@ class FixPart implements Runnable{
 	    try{
 		puzzle.fixNeighbors(i, j);
 	    }catch(Exception e){
-		System.err.println("Errore nel file di input: non è stato trovato match per qualche id");
-		puzzle.setFlag(true);
+		puzzle.addError("Errore nel file di input: non è stato trovato match per qualche id");		
 	    }
 	    i += step_i;
 	    j += step_j;	    

@@ -8,11 +8,15 @@ import java.rmi.*;
 public class ConcurrentPuzzleImpl extends AbstractPuzzle{
     private static ExecutorService exec;
     private boolean errorFlag = false;
+    private String errorString = "";
     public ConcurrentPuzzleImpl() throws RemoteException {}
     public void setFlag(boolean f){
 	/*Qualora qualcosa andasse storto nella risoluzione del puzzle
 	  verrà impostata a true questa flag.*/
 	errorFlag = f;
+    }
+    public void addError(String s){
+	errorString += s + "\n";
     }
     public String solve() throws RemoteException{
 	try{
@@ -83,8 +87,7 @@ public class ConcurrentPuzzleImpl extends AbstractPuzzle{
 		}
 	    }
 	}catch(Exception e){
-	    System.err.println("Errore nel file di input: non è stato trovato match per qualche id");
-	    setFlag(true);
+	    addError("Errore nel file di input: non è stato trovato match per qualche id");	    
 	}
 	finally{
 	    exec.shutdown();
@@ -92,7 +95,7 @@ public class ConcurrentPuzzleImpl extends AbstractPuzzle{
 		exec.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 	    } catch(InterruptedException ie) {}	    
 	}
-	if(errorFlag == true) return "";
+	if(!errorString.equals("")) return errorString;
 	return print();	
     }
 }
