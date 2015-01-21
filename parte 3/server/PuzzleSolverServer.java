@@ -22,6 +22,6 @@ public class PuzzleSolverServer extends UnicastRemoteObject implements PuzzleSol
 	String name = args[0];
 	LocateRegistry.createRegistry(2020);
 	PuzzleSolverServer server = new PuzzleSolverServer();
-	Naming.rebind("//"+name+":2020/server", server);
+	Naming.rebind("//localhost:2020/"+ name, server);
     }
 }
