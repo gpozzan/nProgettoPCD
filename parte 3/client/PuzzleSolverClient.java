@@ -9,11 +9,13 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.NoSuchFileException;
 import java.rmi.*;
+import java.net.MalformedURLException;
 
 public class PuzzleSolverClient{
     private static final Charset charset = StandardCharsets.UTF_8;
-    static String createInput(Path inputPath){
+    static String createInput(Path inputPath) throws NoSuchFileException{
 	String result = "";
 	try (BufferedReader reader = Files.newBufferedReader(inputPath, charset)){
 		String line = null;
@@ -22,6 +24,7 @@ public class PuzzleSolverClient{
 		}
 	    } catch(IOException e){
 	    System.err.println(e);
+	    return "";
 	}
 	return result;
     }
@@ -43,14 +46,41 @@ public class PuzzleSolverClient{
 	Path inputPath = Paths.get(inputFile);
 	Path outputPath = Paths.get(outputFile);
 	String input = createInput(inputPath);
-	PuzzleSolverServerIntf server = (PuzzleSolverServerIntf)Naming.lookup("//localhost:2020/" + name);
-	Puzzle puzzle = server.getPuzzle();
+	if(input.equals("")) return;	
+	PuzzleSolverServerIntf server;
+	try{
+	    server = (PuzzleSolverServerIntf)Naming.lookup("//localhost:2020/" + name);
+	}catch(NotBoundException nbe){
+	    System.err.println("Errore: il nome cercato non è stato caricato nel registro.");
+	    return;
+	}catch(MalformedURLException mue){  
+	    return;
+	}catch(RemoteException re){
+	    System.err.println("Errore: c'è stato un errore nel lookup del riferimento remoto.");
+	    return;
+	}
+	Puzzle puzzle;
+	try{
+	    puzzle = server.getPuzzle();
+	}catch(RemoteException re){
+	    System.err.println("Errore: non è stato possibile ottenere un riferimento a un puzzle remoto.");
+	    System.err.println(re);
+	    return;
+	}	
 	String correctInput = puzzle.initialize(input);
+	
 	if(!correctInput.equals("")){
+	    System.err.println("Errore: il file di input contiene qualche errore, una spiegazione più dettagliata si potrà trovare nel file di output");
 	    printOutput(correctInput, outputPath);
 	    return;
 	}
-        String output = puzzle.solve();
+	String output;
+	try{
+	    output = puzzle.solve();
+	}catch(RemoteException re){
+	    System.err.println("Errore: c'è stato qualche errore di connessione nella risoluzione remota del puzzle.");
+	    return;
+	}
 	printOutput(output, outputPath);
     }
 }
