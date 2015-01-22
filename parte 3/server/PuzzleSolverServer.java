@@ -5,6 +5,7 @@ import server.engine.*;
 import java.rmi.*;
 import java.rmi.server.*;
 import java.rmi.registry.*;
+import java.net.MalformedURLException;
 
 public class PuzzleSolverServer extends UnicastRemoteObject implements PuzzleSolverServerIntf{
     PuzzleSolverServer() throws RemoteException {}
@@ -20,8 +21,21 @@ public class PuzzleSolverServer extends UnicastRemoteObject implements PuzzleSol
 	    return;
 	}
 	String name = args[0];
-	LocateRegistry.createRegistry(2020);
+	try{
+	    LocateRegistry.createRegistry(2020);
+	}catch(RemoteException re){
+	    System.err.println("Errore: c'è stato un errore nella creazione del registro.");
+	    return;
+	}
 	PuzzleSolverServer server = new PuzzleSolverServer();
-	Naming.rebind("//localhost:2020/"+ name, server);
+	try{
+	    Naming.rebind("//localhost:2020/"+ name, server);
+	}catch(MalformedURLException mue){
+	    System.err.println("Errore: il nome fornito sembra dare problemi.");
+	    return;
+	}catch(RemoteException re){
+	    System.err.println("Errore: c'è stato un errore nel contattare il registro.");
+	    return;
+	}
     }
 }
