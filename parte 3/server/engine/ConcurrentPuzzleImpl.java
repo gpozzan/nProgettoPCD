@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.rmi.*;
+import common.WrongInput;
 
 public class ConcurrentPuzzleImpl extends AbstractPuzzle{
     private static ExecutorService exec;
@@ -18,7 +19,7 @@ public class ConcurrentPuzzleImpl extends AbstractPuzzle{
     public void addError(String s){
 	errorString += s + "\n";
     }
-    public String solve() throws RemoteException{
+    public String solve() throws RemoteException, WrongInput{
 	try{
 	    PuzzlePiece first = getFirst();	
 	    setMatrix(0,0,getFirst());
@@ -95,7 +96,7 @@ public class ConcurrentPuzzleImpl extends AbstractPuzzle{
 		exec.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 	    } catch(InterruptedException ie) {}	    
 	}
-	if(!errorString.equals("")) return errorString;
+	if(!errorString.equals("")) throw new WrongInput(errorString);
 	return print();	
     }
 }

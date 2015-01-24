@@ -77,7 +77,12 @@ public class PuzzleSolverClient{
 	String output;
 	try{
 	    output = puzzle.solve();
-	}catch(RemoteException re){
+	}catch(WrongInput wi){
+	    System.err.println("Errore: il file di input contiene qualche errore, una spiegazione più dettagliata si potrà trovare nel file di output");
+	    printOutput(wi.get(), outputPath);
+	    return;
+	}
+	catch(RemoteException re){
 	    System.err.println("Errore: c'è stato qualche errore di connessione nella risoluzione remota del puzzle.");
 	    return;
 	}

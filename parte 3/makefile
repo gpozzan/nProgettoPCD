@@ -8,6 +8,7 @@ CLASSES = \
         ./client/PuzzleSolverClient.java \
 	./common/Puzzle.java \
 	./common/PuzzleSolverServerIntf.java \
+	./common/WrongInput.java \
 	./server/PuzzleSolverServer.java \
 	./server/engine/AbstractPuzzle.java \
 	./server/engine/ConcurrentPuzzleImpl.java \

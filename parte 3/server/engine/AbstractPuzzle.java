@@ -1,6 +1,7 @@
 package server.engine;
 
 import common.Puzzle;
+import common.WrongInput;
 import java.util.HashMap;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -113,6 +114,6 @@ abstract class AbstractPuzzle extends UnicastRemoteObject implements Puzzle{
 	}
 	return resPhr + "\n" + "\n" + resTab + "\n" + n_row + " " + n_col;
     }
-    abstract public String solve() throws RemoteException;
+    abstract public String solve() throws RemoteException, WrongInput;
     
 }
